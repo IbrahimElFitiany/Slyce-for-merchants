@@ -2,13 +2,76 @@ function LoginPage() {
   return (
     <div className="flex h-screen w-screen">
 
-      {/* Left Section: Illustration and Promo */}
-      <div className="w-1/2 bg-white text-brand-black flex flex-col justify-center items-center p-4 font-[Intervariable]">
+      <div className="w-1/2 bg-whitebg flex flex-col items-center gap-y-25 px-8 font-[InterVariable] text-brand-black">
 
-        <div className="m-4 w-full h-full flex justify-center border-1 border-brand-grey bg-whitebg rounded-2xl">
+
+        <form className="w-full max-w-md space-y-6">
+
+          <div className="flex items-center justify-between w-full py-12">
+            <div className="flex items-center">
+              <img src="/images/greenLogo.png" alt="" className="size-12"/>
+              <span>for Merchant</span>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold">Welcome Back</h2>
+          <h3>Login to your Slyce account </h3>
+
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
+            required
+          />
+
+          <div className="text-right">
+            <a href="#" className="text-accent text-sm hover:underline">Forgot password?</a>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:scale-101 hover:brightness-105 transition-all duration-300"
+          >
+            Log In
+          </button>
+
+          <div className="flex gap-x-1 items-center">
+            <div className="border-b-1 border-brand-grey w-full"></div>
+            <h5 className="mx-2">or</h5>
+            <div className="border-b-1 border-brand-grey w-full"></div>
+          </div>
+
+
+          <button
+            type="button"
+            className="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200"
+          >
+            Log in with phone number
+          </button>
+          <button
+            type="button"
+            className="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200"
+          >
+            Sign in with Google
+          </button>
+          <p className="text-center text-sm text-gray-600">
+            No account? <a href="#" className="text-accent hover:underline">Partner with Slyce</a>
+          </p>
+        </form>
+      </div>
+
+      <div className="w-1/2 text-brand-black flex flex-col justify-center items-center p-4 font-[Intervariable]">
+
+        <div className="m-4 w-full h-full flex justify-center border-1 border-brand-grey bg-[#DBF0DC] rounded-2xl">
 
           <div className="w-82 flex flex-col justify-center">
-            <img className="size-80" src="/images/Cooking-bro.png" alt="" />
 
             <h2 className="text-2xl font-bold mb-4">
               Grow your kitchen with <span className="text-accent font-extrabold">Slyce</span>
@@ -77,59 +140,6 @@ function LoginPage() {
 
         </div>
 
-      </div>
-
-      {/* Right Section: Login Form */}
-      <div className="w-1/2 bg-white flex flex-col items-center gap-y-25 px-8 font-[InterVariable] text-brand-black">
-        <header className="flex items-center justify-between w-full py-12">
-          <div className="flex items-center">
-            <img src="/images/greenLogo.png" alt="" className="size-12"/>
-            <span>for Merchant</span>
-          </div>
-
-          <button>
-            jdksj
-          </button>
-        </header>
-        <form className="w-full max-w-md space-y-6">
-          <h2 className="text-3xl font-bold">Log in with your email</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
-            required
-          />
-          <div className="text-right">
-            <a href="#" className="text-accent text-sm hover:underline">Forgot password?</a>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:scale-101 hover:brightness-105 transition-all duration-300"
-          >
-            Log In
-          </button>
-          <button
-            type="button"
-            className="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200"
-          >
-            Log in with phone number
-          </button>
-          <button
-            type="button"
-            className="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200"
-          >
-            Sign in with Google
-          </button>
-          <p className="text-center text-sm text-gray-600">
-            No account? <a href="#" className="text-accent hover:underline">Partner with Talabat</a>
-          </p>
-        </form>
       </div>
     </div>
   );
