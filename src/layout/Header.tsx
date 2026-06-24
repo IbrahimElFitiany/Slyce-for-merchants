@@ -1,14 +1,28 @@
 import { HelpIcon } from "@/components/icons/HelpIcon"
 import { NotificationIcon } from "@/components/icons/NotificationIcon"
+import { useLocation } from "react-router-dom"
 
 type branch = {
   id:string,
   name: string
 }
 
+const TITLES: Record<string, string> = {
+  "/dashboard": "Dashboard",
+  "/orders": "Orders",
+  "/performance": "Performance",
+  "/reviews": "Reviews",
+  "/promotions": "Promotions",
+  "/payments": "Payments",
+  "/menu": "Menu",
+  "/opening-times": "Opening Times",
+  "/settings": "Settings",
+}
+
 function Header() {
 
-  const activePageTitle = "Dashboard"
+  const path = useLocation()
+  const activePageTitle = TITLES[path.pathname]
 
   const restaurantBranches : branch[] =
   [
@@ -19,9 +33,9 @@ function Header() {
 
 
   return (
-    <div className="flex w-full items-center justify-between px-10 py-5">
+    <div className="flex w-full items-center justify-between py-5">
 
-      <div>
+      <div className="flex flex-col gap-y-1">
         <p className="text-4xl text-brand-black font-bold">{activePageTitle}</p>
 
         <select className="text-accent text-base font-bold focus:outline-none">

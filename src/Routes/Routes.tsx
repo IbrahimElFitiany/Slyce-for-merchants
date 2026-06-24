@@ -4,6 +4,11 @@ import Layout from "@/layout/Layout";
 import PageLoader from "@/components/ui/PageLoader";
 import NotFound from "@/components/ui/NotFound";
 
+const OrdersPage = lazy(() => import("@/features/orders/OrdersPage"));
+const PerformancePage = lazy(() => import("@/features/Performance/PerformancePage"));
+const ReviewsPage = lazy(() => import("@/features/Reviews/ReviewsPage"));
+const PaymentPage = lazy(() => import("@/features/payment/PaymentPage"));
+const PromotionsPage = lazy(() => import("@/features/promotions/PromotionsPage"));
 const OpeningTimesPage = lazy(() => import("@/features/opening-times/openingTimesPage"));
 const LandingPage = lazy(() => import("@/features/landing/LandingPage"));
 const LoginPage = lazy(() => import("@/features/auth/LoginPage"));
@@ -38,9 +43,15 @@ export const router = createBrowserRouter(
         </Suspense>
       ),
       children: [
-        {path: "/opening-times", element: <OpeningTimesPage/>},
-        { path: "/dashboard", element: <Dashboard /> },
-        { path: "/menu",      element: <MenuManagementPage /> },
+        { path: "/dashboard",     element: <Dashboard /> },
+        { path: "/menu",          element: <MenuManagementPage /> },
+        { path: "/orders",        element: <OrdersPage /> },
+        { path: "/performance",   element: <PerformancePage /> },
+        { path: "/reviews",       element: <ReviewsPage /> },
+        { path: "/promotions",    element: <PromotionsPage/> },
+        { path: "/payments",      element: <PaymentPage /> },
+        { path: "/opening-times", element: <OpeningTimesPage/>},
+        { path: "/settings",      element: <OrdersPage /> },
       ],
     },
     {

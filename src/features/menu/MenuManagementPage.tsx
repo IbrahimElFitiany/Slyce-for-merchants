@@ -140,7 +140,7 @@ function MenuManagementPage() {
   const [isModalOpen ,setIsModalOpen] = useState<boolean>(false)
 
   return (
-    <div className="flex gap-x-5 mx-10 my-20 h-full">
+    <div className="flex gap-x-5 my-20 h-full">
 
       <div id="categories section" className="w-2xs flex flex-col">
 

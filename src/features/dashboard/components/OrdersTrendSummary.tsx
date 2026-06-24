@@ -13,7 +13,7 @@ function OrdersTrendSummary() {
   const [active, setActive] = useState(filters[0]);
 
   return (
-    <div className="flex flex-col w-1/2 px-10 py-5">
+    <div className="flex flex-col w-1/2 py-5">
 
       <div className="flex my-2 font-bold w-full justify-between">
 
