@@ -3,10 +3,11 @@
 
 @theme {
   --color-accent: #4CB050;
+  --color-dark-accent: #21A326;
   --color-whitebg: #FFFAF0;
   --color-brand-black: #333333;
   --color-brand-grey:#D9D9D9;
-
+  --color-text-grey: #6E6E6E;
 }
 
 @font-face {
@@ -15,6 +16,10 @@
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
+}
+
+.recharts-wrapper *:focus {
+  outline: none;
 }
 
 #nav {
