@@ -1,8 +1,4 @@
-type IconProps = {
-  className?: string;
-  size?: number;
-  color?: string;
-};
+import type { IconProps } from "./IconProps";
 
 export function OrdersIcon({ className, size = 20, color = "currentColor" }: IconProps) {
   return (

@@ -1,8 +1,4 @@
-type IconProps = {
-  className?: string;
-  size?: number;
-  color?: string;
-};
+import type { IconProps } from "./IconProps";
 
 export function GlobeIcon({ className, size = 28, color = "currentColor" }: IconProps) {
   return (
