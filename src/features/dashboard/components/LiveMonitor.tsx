@@ -1,6 +1,6 @@
 function LiveMonitor() {
   return (
-    <div className="flex flex-col w-[50%]  px-10 py-5">
+    <div className="flex flex-col px-10 py-5">
 
       <div className="flex my-2 font-bold w-full justify-between">
         <p className=" text-brand-black text-2xl">Live Monitor</p>
