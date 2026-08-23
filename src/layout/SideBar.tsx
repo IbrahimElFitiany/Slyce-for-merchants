@@ -4,7 +4,11 @@ import { OrdersIcon } from "@/components/icons/OrdersIcon";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PerformanceIcon } from "@/components/icons/PerformanceIcon";
 import { ChatIcon } from "@/components/icons/ChatIcon";
-import { ClockIcon, GearIcon, BookOpenIcon, WalletIcon, DiscountIcon } from "@/components/icons/GearIcon";
+import { GearIcon } from "@/components/icons/GearIcon";
+import { DiscountIcon } from "@/components/icons/DiscountIcon";
+import { WalletIcon } from "@/components/icons/WalletIcon";
+import { BookOpenIcon } from "@/components/icons/BookOpenIcon";
+import { ClockIcon } from "@/components/icons/ClockIcon";
 
 type TabItem = {
   name: string;
@@ -53,7 +57,7 @@ export function SideBar() {
   const {pathname} = useLocation();
 
   return (
-    <aside className="flex flex-col items-start w-3xs sticky py-5 h-screen bg-whitebg border-r-1 border-brand-grey">
+    <aside className="flex flex-col items-start w-3xs sticky top-0 py-5 h-screen bg-whitebg border-r-1 border-brand-grey">
 
       <div id="Logo" className="flex justify-center items-center">
         <img src="/images/greenLogo.png" alt="logo" className="w-15 h-15" />
