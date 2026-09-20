@@ -1,11 +1,7 @@
 import { HelpIcon } from "@/components/icons/HelpIcon"
 import { NotificationIcon } from "@/components/icons/NotificationIcon"
 import { useLocation } from "react-router-dom"
-
-type branch = {
-  id:string,
-  name: string
-}
+import { BranchSelect } from "./BranchSelect"
 
 const TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -21,31 +17,17 @@ const TITLES: Record<string, string> = {
 
 function Header() {
 
-  const path = useLocation()
-  const activePageTitle = TITLES[path.pathname]
-
-  const restaurantBranches : branch[] =
-  [
-    {id: "1", name: "El Sherouk Branch"},
-    {id: "2", name: "El Tagamo3 Branch"},
-    {id: "3", name: "Main Branch"}
-  ]
-
+  const { pathname } = useLocation()
+  const normalizedPath = pathname.toLowerCase()
+  const activePageTitle = TITLES[normalizedPath] || "Dashboard"
 
   return (
     <div className="flex w-full items-center justify-between py-5">
 
+      {/* page title & branch selection */}
       <div className="flex flex-col gap-y-1">
         <p className="text-4xl text-brand-black font-bold">{activePageTitle}</p>
-
-        <select className="text-accent text-base font-bold focus:outline-none">
-          {restaurantBranches.map(b => {
-            return (
-              <option key={b.id} value={b.name}>{b.name}</option>
-            )
-          })}
-        </select>
-
+        <BranchSelect/>
       </div>
 
       <div className="flex gap-x-5">

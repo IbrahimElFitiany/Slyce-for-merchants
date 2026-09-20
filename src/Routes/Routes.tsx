@@ -9,7 +9,7 @@ const PerformancePage = lazy(() => import("@/features/Performance/PerformancePag
 const ReviewsPage = lazy(() => import("@/features/Reviews/ReviewsPage"));
 const PaymentPage = lazy(() => import("@/features/payment/PaymentPage"));
 const PromotionsPage = lazy(() => import("@/features/promotions/PromotionsPage"));
-const OpeningTimesPage = lazy(() => import("@/features/opening-times/openingTimesPage"));
+const OpeningTimesPage = lazy(() => import("@/features/opening-times/OpeningTimesPage"));
 const LandingPage = lazy(() => import("@/features/landing/LandingPage"));
 const LoginPage = lazy(() => import("@/features/auth/LoginPage"));
 const Dashboard = lazy(() => import("@/features/dashboard/DashboardPage"));
