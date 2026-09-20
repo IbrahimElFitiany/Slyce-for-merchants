@@ -2,6 +2,7 @@ import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import Backdrop from "./Backdrop";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "motion/react"
 
 interface DrawerProps {
   isOpen: boolean;
@@ -15,25 +16,26 @@ function Drawer({ isOpen, onClose, children, className }: DrawerProps) {
   useBodyScrollLock(isOpen);
   const portalRoot = document.getElementById("portal-root")!;
 
-  return createPortal (
-    <>
-      <Backdrop onClick={onClose} isOpen={isOpen} />
+  return createPortal(
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <Backdrop onClick={onClose} isOpen={isOpen} />
 
-      <div className="drawer-panel">
-
-        <div className={`fixed top-0 right-0 rounded-l-4xl overflow-y-auto flex flex-col bg-whitebg px-8 text-brand-black h-screen transition-transform duration-300
-          ${className}
-          ${isOpen
-            ? "translate-x-0 pointer-events-auto z-100 shadow-2xl"
-            : "translate-x-full pointer-events-none drop-shadow-none"
-          }`
-        }>
-          {children}
-
-        </div>
-
-      </div>
-    </>, portalRoot);
+          <motion.div
+            className={`fixed top-0 right-0 rounded-l-4xl overflow-y-auto flex flex-col bg-whitebg px-8 text-brand-black h-screen shadow-2xl z-100 ${className}`}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            {children}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>,
+    portalRoot
+  );
 }
 
 export default Drawer;
