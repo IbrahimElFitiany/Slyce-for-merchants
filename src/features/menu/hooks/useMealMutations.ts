@@ -35,7 +35,15 @@ export function useMealMutations() {
         description: args.description,
         imgUrl: args.imgUrl,
         ingredients: args.ingredients,
-        sizes: args.sizes,
+        sizes: args.sizes.map((size) => ({
+          name: size.name,
+          price: size.price,
+          sortOrder: size.sortOrder,
+          IngredientQuantities: size.IngredientQuantities.map((iq)=>({
+            ingredientId: iq.Id,
+            quantity: iq.quantity
+          }))
+        })),
       }),
     onSuccess: invalidateMenu,
     onError: (error) => {
