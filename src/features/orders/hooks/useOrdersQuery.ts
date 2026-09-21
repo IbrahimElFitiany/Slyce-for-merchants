@@ -1,12 +1,17 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getBranchOrders } from "../services/ordersServices";
+import { getOrders } from "../services/ordersServices";
+import { useBranchContext } from "@/context/BranchContext";
+import type { OrderStatus } from "../types.domain";
 
-function useOrdersQuery(pageNumber: number, perPageSize: number) {
+function useOrdersQuery(pageNumber: number, perPageSize: number, orderStatus?:OrderStatus) {
+
+  const { selectedBranch } = useBranchContext();
 
   const { data, isPending, isFetching, isError, refetch} = useQuery({
-    queryKey: ["branch", "orders", pageNumber, perPageSize],
-    queryFn: () => getBranchOrders(pageNumber, perPageSize, "gfkjdfkj"),
+    queryKey: ["orders", { pageNumber, perPageSize, branchId: selectedBranch?.id, orderStatus }],
+    queryFn: () => getOrders(pageNumber, perPageSize, orderStatus, selectedBranch?.id),
     placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false
   });
 
   return {

@@ -1,12 +1,11 @@
 import { formatCurrency } from "@/utils/formatters";
-import type { OrderSummary } from "../types";
+import type { OrderSummary } from "../types.domain";
 import { StatusBadge } from "./StatusBadge";
 
 interface OrderSummaryRowProps {
   orderSummary:OrderSummary,
   onClick: () => void
 }
-
 
 function OrderSummaryRow({ onClick, orderSummary }: OrderSummaryRowProps ) {
 
@@ -29,6 +28,7 @@ function OrderSummaryRow({ onClick, orderSummary }: OrderSummaryRowProps ) {
 
       <td className="font-semibold text-text-grey">{orderSummary.date}</td>
       <td className="font-medium text-text-grey">{orderSummary.customerName}</td>
+      <td className="font-medium text-text-grey">{orderSummary.branchName}</td>
       <td className="text-right font-medium text-text-grey">{formatCurrency(orderSummary.subTotal)} EGP</td>
     </tr>
   );

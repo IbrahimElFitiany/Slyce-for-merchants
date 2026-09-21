@@ -6,25 +6,37 @@ import useOrdersPage from "./hooks/useOrdersPage";
 import OrdersPageSkeleton from "./components/OrdersPageSkeleton";
 import OrdersErrorState from "./components/OrdersErrorState";
 import { useEffect } from "react";
+import { ORDER_STATUS_STYLES, OrderStatus } from "./types.domain";
+import { CheckIcon } from "@/components/icons/CheckIcon";
+import OrderDrawer from "./components/OrderDetailsDrawer/OrderDrawer";
+
+
+const FILTERABLE_STATUSES = Object.values(OrderStatus).filter(
+  (status) => status !== OrderStatus.Unknown
+);
 
 function OrdersPage() {
 
   const {
-    totalOrders,
-    pageSize,
-    currentPage,
-    totalPages,
-    hasNext,
-    hasPrevious,
     orders,
-    isPending,
-    isFetching,
-    isError,
-    refetch,
-    setPageNumber,
-    setPerPageSize,
-    goToNextPage,
-    goToPrevPage,
+    selectedOrder,
+    status: { isPending, isFetching, isError, refetch },
+    filter: { orderStatusFilter, setOrderStatusFilter },
+    pagination: {
+      currentPage,
+      pageSize,
+      totalPages,
+      totalOrders,
+      hasNext,
+      hasPrevious,
+      showingFrom,
+      showingTo,
+      setPageNumber,
+      setPerPageSize,
+      goToNextPage,
+      goToPrevPage,
+    },
+    drawer: { selectedOrderId, setSelectedOrderId }
   } = useOrdersPage();
 
   useEffect(() => {
@@ -32,156 +44,216 @@ function OrdersPage() {
   }, [currentPage, pageSize]);
 
   if (isPending) return <OrdersPageSkeleton />;
-
   if (isError) return <OrdersErrorState onRetry={refetch}/>
 
-  const start = (currentPage - 1) * pageSize + 1;
-  const end = Math.min(currentPage * pageSize, totalOrders);
-
   return (
-    <div className="relative my-20 w-[90%] border-1 border-brand-grey rounded-2xl">
+    <>
+      <title>Slyce · Orders</title>
 
-      <header className="px-4 py-4 flex items-center justify-between">
+      <div className="relative my-20 w-[90%] border-1 border-brand-grey rounded-2xl">
 
-        <button className="flex items-center py-2 px-3 gap-x-2 border border-gray-300 rounded-full text-brand-black">
-          <SearchIcon />
-          <input className="focus:outline-0" type="text" placeholder="search orders by Id" />
-        </button>
+        <header className="px-4 py-4 flex items-center justify-between">
 
-        <div className="flex items-center gap-x-3">
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <button className="flex items-center gap-x-2 border border-brand-grey px-4 py-2 rounded-full font-medium">
-                Order Status
-                <ChevronIcon direction="down" />
-              </button>
-            </DropdownMenu.Trigger>
+          {/* search bar (not working rn)*/}
+          <div className="flex w-full max-w-sm items-center py-2 px-3 gap-x-2 border border-gray-300 rounded-full text-brand-black">
+            <SearchIcon />
+            <input
+              className="focus:outline-0 w-full"
+              type="text"
+              placeholder="Search by order ID or customer name" />
+          </div>
 
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content className="flex flex-col gap-y-3 font-medium text-brand-black bg-whitebg border-1 p-3 rounded-2xl my-1 border-brand-grey focus:outline-0">
-                <DropdownMenu.Item className="cursor-pointer focus:outline-0" onSelect={() => console.log("zby")}>
-                  Pending
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="cursor-pointer focus:outline-0" onSelect={() => console.log("zby")}>
-                  Preparing
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="cursor-pointer focus:outline-0" onSelect={() => console.log("zby")}>
-                  Out For Delivery
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="cursor-pointer focus:outline-0" onSelect={() => console.log("zby")}>
-                  Delivered
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="cursor-pointer focus:outline-0" onSelect={() => console.log("zby")}>
-                  Cancelled
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
-        </div>
+          {/* filtering section */}
+          <div className="flex items-center gap-x-3">
 
-      </header>
+            {/* orderStatus Filter */}
+            <DropdownMenu.Root modal={false}>
 
-      <table className="w-full text-left">
+              <DropdownMenu.Trigger asChild>
 
-        <thead className="[&_th]:font-medium">
-          <tr className="border-y border-brand-grey text-sm  text-text-grey">
-            <th className="py-3 px-6">Order</th>
-            <th className="py-3 px-6">Order Status</th>
-            <th className="py-3 px-6">Order Date</th>
-            <th className="py-3 px-6">Customer</th>
-            <th className="py-3 px-6 text-right">Subtotal</th>
-          </tr>
-        </thead>
+                <button className="group flex items-center gap-x-2 border border-brand-grey px-4 py-2 rounded-full font-medium focus:outline-0 cursor-pointer">
 
-        <tbody className="divide-y divide-brand-grey last:border-b-1 border-brand-grey">
-          {orders?.map((order) => (
-            <OrderSummaryRow
-              key={order.orderId}
-              onClick={() => console.log(order.orderId)}
-              orderSummary={order}
-            />
-          ))}
-        </tbody>
+                  {orderStatusFilter ?? "Order Status"}
 
-      </table>
+                  <ChevronIcon
+                    direction="down"
+                    className="transition-transform duration-400 group-data-[state=open]:rotate-270"
+                  />
 
-      <footer className="flex items-center justify-between px-6 py-4">
-
-        {/* showing start - end out of x orders */}
-        <p className="text-sm text-text-grey font-medium">
-          Showing <span className="font-semibold text-brand-black">{start}–{end}</span> of{" "}
-          <span className="font-semibold text-brand-black">{totalOrders}</span> Orders
-        </p>
-
-        {/* pagination */}
-        <div className="flex font-medium gap-x-5">
-
-          <button
-            className="flex items-center cursor-pointer gap-x-1 disabled:text-text-grey/80 disabled:cursor-not-allowed"
-            disabled={!hasPrevious}
-            onClick={goToPrevPage}
-          >
-            <ChevronIcon direction="left" size={15}/>
-            Previous
-          </button>
-
-          <div className="flex items-center gap-x-1 border border-brand-grey rounded-full p-1.5">
-
-            {Array.from({ length: totalPages ?? 0}, (_, i) => i + 1).map((page) => {
-              const isActive = page === currentPage;
-
-              return (
-                <button
-                  key={page}
-                  className={`w-7 h-7 text-xs rounded-full cursor-pointer transition-colors duration-500 ${
-                    isActive
-                      ? "bg-accent text-whitebg font-bold"
-                      : "text-text-grey hover:text-whitebg hover:bg-accent/80"
-                  }`}
-                  onClick={() => setPageNumber(page)}
-                >
-                  {page}
                 </button>
-              );
-            })}
+
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu.Portal>
+
+                <DropdownMenu.Content
+                  side="bottom"
+                  align="end"
+                  sideOffset={5}
+                  className="flex flex-col shadow-xl gap-y-2.5 text-base font-medium bg-whitebg border-1 border-brand-grey p-3 pr-6 rounded-2xl focus:outline-0
+                  data-[state=open]:animate-in
+                  data-[state=open]:fade-in-0
+                  data-[state=open]:zoom-in-95
+                  data-[state=closed]:animate-out
+                  data-[state=closed]:fade-out-0
+                  data-[state=closed]:zoom-out-95
+                  duration-200"
+                >
+                  {FILTERABLE_STATUSES.map((status) => (
+                    <DropdownMenu.Item
+                      key={status}
+                      className="flex items-center gap-x-4 focus:outline-none"
+                      onSelect={() => setOrderStatusFilter(status)}
+                    >
+                      <span
+                        className={`${ORDER_STATUS_STYLES[status]} w-fit py-1 px-2.5 rounded-xl cursor-pointer hover:brightness-110 duration-200`}
+                      >
+                        {status}
+                      </span>
+
+                      {orderStatusFilter === status && <CheckIcon className="text-accent"/>}
+
+                    </DropdownMenu.Item>
+                  ))}
+
+                  <DropdownMenu.Item
+                    className="flex items-center justify-between cursor-pointer focus:outline-none"
+                    onSelect={() => setOrderStatusFilter(undefined)}
+                  >
+                    All statuses
+                    {orderStatusFilter === undefined && <CheckIcon className="text-accent"/>}
+
+                  </DropdownMenu.Item>
+
+                </DropdownMenu.Content>
+
+              </DropdownMenu.Portal>
+
+            </DropdownMenu.Root>
 
           </div>
 
-          <button
-            className="flex items-center cursor-pointer gap-x-1 disabled:text-text-grey/80 disabled:cursor-not-allowed"
-            disabled={!hasNext}
-            onClick={goToNextPage}
-          >
-            Next
-            <ChevronIcon direction="right" size={15}/>
-          </button>
+        </header>
 
-        </div>
+        <table
+          className={`w-full text-left ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+          aria-busy={isFetching}
+        >
 
-        {/* Page Size Selector */}
-        <div className="flex items-center gap-x-2 text-sm text-text-grey">
+          <thead className="[&_th]:font-medium [&_th]:py-3 [&_th]:px-6">
 
-          <label htmlFor="rows-per-page-select" className="select-none">
-            Rows per page
-          </label>
+            <tr className="border-y border-brand-grey text-sm  text-text-grey">
+              <th>Order</th>
+              <th>Order Status</th>
+              <th>Order Date</th>
+              <th>Customer</th>
+              <th>Branch</th>
+              <th className="text-right">Subtotal</th>
+            </tr>
 
-          <select
-            id="rows-per-page-select"
-            value={pageSize}
-            onChange={(e) => setPerPageSize(Number(e.target.value))}
-            className="border border-brand-grey px-2.5 py-1 rounded-lg text-sm font-semibold text-brand-black bg-whitebg cursor-pointer transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
-          >
-            {[10, 20, 30, 40, 50].map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
+          </thead>
+
+          <tbody className="divide-y divide-brand-grey last:border-b-1 border-brand-grey">
+
+            {orders?.map((order) => (
+              <OrderSummaryRow
+                key={order.orderId}
+                onClick={() => setSelectedOrderId(order.orderId)}
+                orderSummary={order}
+              />
             ))}
-          </select>
-        </div>
+          </tbody>
 
-      </footer>
+        </table>
 
-    </div>
+        <footer className="flex items-center justify-between px-6 py-4">
+
+          {/* showing start - end out of x orders */}
+          <p className="text-sm text-text-grey font-medium">
+            Showing <span className="font-semibold text-brand-black">{showingFrom}–{showingTo}</span> of{" "}
+            <span className="font-semibold text-brand-black">{totalOrders}</span> Orders
+          </p>
+
+          {/* pagination */}
+          <div className="flex font-medium gap-x-5">
+
+            <button
+              className="flex items-center cursor-pointer gap-x-1 disabled:text-text-grey/80 disabled:cursor-not-allowed"
+              disabled={!hasPrevious}
+              onClick={goToPrevPage}
+            >
+              <ChevronIcon direction="left" size={15}/>
+              Previous
+            </button>
+
+            <div className="flex items-center gap-x-1 border border-brand-grey rounded-full p-1.5">
+
+              {Array.from({ length: totalPages ?? 0}, (_, i) => i + 1).map((page) => {
+                const isActive = page === currentPage;
+
+                return (
+                  <button
+                    key={page}
+                    className={`w-7 h-7 text-xs rounded-full cursor-pointer transition-colors duration-500 ${
+                      isActive
+                        ? "bg-accent text-whitebg font-bold"
+                        : "text-text-grey hover:text-whitebg hover:bg-accent/80"
+                    }`}
+                    onClick={() => setPageNumber(page)}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+
+            </div>
+
+            <button
+              className="flex items-center cursor-pointer gap-x-1 disabled:text-text-grey/80 disabled:cursor-not-allowed"
+              disabled={!hasNext}
+              onClick={goToNextPage}
+            >
+              Next
+              <ChevronIcon direction="right" size={15}/>
+            </button>
+
+          </div>
+
+          {/* Page Size Selector */}
+          <div className="flex items-center gap-x-2 text-sm text-text-grey">
+
+            <label htmlFor="rows-per-page-select" className="select-none">
+              Rows per page
+            </label>
+
+            <select
+              id="rows-per-page-select"
+              value={pageSize}
+              onChange={(e) => setPerPageSize(Number(e.target.value))}
+              className="border border-brand-grey px-2.5 py-1 rounded-lg text-sm font-semibold text-brand-black bg-whitebg cursor-pointer transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+            >
+              {[10, 20, 30, 40, 50].map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
+
+        </footer>
+
+      </div>
+
+
+      <OrderDrawer
+        isOpen={Boolean(selectedOrderId)}
+        onClose={() => setSelectedOrderId(null)}
+        orderId={selectedOrderId ?? ""}
+        orderStatus={selectedOrder?.orderStatus ?? OrderStatus.Unknown}
+        customerName={selectedOrder?.customerName ?? ""}
+      />
+
+    </>
   );
 }
 
