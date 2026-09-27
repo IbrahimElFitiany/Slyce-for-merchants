@@ -1,5 +1,5 @@
 import type { StatusStep } from "@/features/orders/types.domain";
-import { formatTime } from "@/utils/formatters";
+import { formatIsoDateTime } from "@/utils/formatters";
 
 interface StepProps{
   step: StatusStep;
@@ -42,7 +42,7 @@ function Step ({step, isActive, isLast, isComplete, timestamp}:StepProps) {
             {step.status}
           </span>
 
-          {timestamp && <span className="text-text-grey font-medium text-xs">{formatTime(timestamp)}</span>
+          {timestamp && <span className="text-text-grey font-medium text-xs">{formatIsoDateTime(timestamp)}</span>
           }
 
         </div>
