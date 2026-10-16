@@ -2,6 +2,7 @@ import { HelpIcon } from "@/components/icons/HelpIcon"
 import { NotificationIcon } from "@/components/icons/NotificationIcon"
 import { useLocation } from "react-router-dom"
 import { BranchSelect } from "./BranchSelect"
+import { useCurrentUser } from "@/hooks/useCurrentUser"
 
 const TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -20,6 +21,7 @@ function Header() {
   const { pathname } = useLocation()
   const normalizedPath = pathname.toLowerCase()
   const activePageTitle = TITLES[normalizedPath] || "Dashboard"
+  const {user} = useCurrentUser()
 
   return (
     <div className="flex w-full items-center justify-between py-5">
@@ -43,7 +45,7 @@ function Header() {
 
         <button className="cursor-pointer w-10 h-10 border border-brand-grey rounded-full overflow-hidden">
           <img
-            src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRZc7Z-74fAPVZ3bCLnuYyDb-XhPI-rb9MwcL1d00Sq8B0G_pqijHUMBPGRJeojWLzoUcwygcpIRlBQNHuOwfYzMCF2k1-bkAuJGAicNQ"
+            src={user?.avatarUrl}
             alt="Profile"
             className="w-full h-full object-cover"
           />

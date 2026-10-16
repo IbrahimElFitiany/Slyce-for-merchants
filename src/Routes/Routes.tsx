@@ -1,62 +1,54 @@
-import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "@/layout/Layout";
-import PageLoader from "@/components/ui/PageLoader";
 import NotFound from "@/components/ui/NotFound";
+import ProtectedRoutes from "./ProtectedRoutes";
+import GuestRoutes from "./GuestRoutes";
 
-const OrdersPage = lazy(() => import("@/features/orders/OrdersPage"));
-const PerformancePage = lazy(() => import("@/features/Performance/PerformancePage"));
-const ReviewsPage = lazy(() => import("@/features/Reviews/ReviewsPage"));
-const PaymentPage = lazy(() => import("@/features/payment/PaymentPage"));
-const PromotionsPage = lazy(() => import("@/features/promotions/PromotionsPage"));
-const OpeningTimesPage = lazy(() => import("@/features/opening-times/OpeningTimesPage"));
-const LandingPage = lazy(() => import("@/features/landing/LandingPage"));
-const LoginPage = lazy(() => import("@/features/auth/LoginPage"));
-const Dashboard = lazy(() => import("@/features/dashboard/DashboardPage"));
-const MenuManagementPage = lazy(() => import("@/features/menu/MenuManagementPage"));
-
+import OrdersPage from "@/features/orders/OrdersPage";
+import PerformancePage from "@/features/Performance/PerformancePage";
+import ReviewsPage from "@/features/Reviews/ReviewsPage";
+import PaymentPage from "@/features/payment/PaymentPage";
+import PromotionsPage from "@/features/promotions/PromotionsPage";
+import OpeningTimesPage from "@/features/opening-times/OpeningTimesPage";
+import LandingPage from "@/features/landing/LandingPage";
+import LoginPage from "@/features/auth/Pages/LoginPage";
+import Dashboard from "@/features/dashboard/DashboardPage";
+import MenuManagementPage from "@/features/menu/MenuManagementPage";
+import SettingsPage from "@/features/Settings/SettingsPage";
+import ForgotPasswordPage from "@/features/auth/Pages/ForgotPasswordPage";
 
 export const router = createBrowserRouter(
   [
     {
-      path: "/",
-      element: <Navigate to="/landing" replace />,
-    },
-    {
-      path: "/landing",
-      element:
-        <Suspense fallback={<PageLoader/>}>
-          <LandingPage />
-        </Suspense>,
-    },
-    {
-      path: "/login",
-      element:
-        <Suspense fallback={<PageLoader/>}>
-          <LoginPage />
-        </Suspense>,
-    },
-    {
-      element: (
-        <Suspense fallback={<PageLoader/>}>
-          <Layout/>
-        </Suspense>
-      ),
+      id: "Guests only routes",
+      element: <GuestRoutes />,
       children: [
-        { path: "/dashboard",     element: <Dashboard /> },
-        { path: "/menu",          element: <MenuManagementPage /> },
-        { path: "/orders",        element: <OrdersPage /> },
-        { path: "/performance",   element: <PerformancePage /> },
-        { path: "/reviews",       element: <ReviewsPage /> },
-        { path: "/promotions",    element: <PromotionsPage/> },
-        { path: "/payments",      element: <PaymentPage /> },
-        { path: "/opening-times", element: <OpeningTimesPage/>},
-        { path: "/settings",      element: <OrdersPage /> },
+        { path: "/", element: <Navigate to="/landing" replace /> },
+        { path: "/landing", element: <LandingPage /> },
+        { path: "/login", element: <LoginPage /> },
+        { path: "/reset-password", element: <ForgotPasswordPage /> },
+      ]
+    },
+    {
+      id: "Protected routes",
+      element: <ProtectedRoutes />,
+      children: [
+        {
+          element: <Layout />,
+          children: [
+            { path: "/dashboard", element: <Dashboard /> },
+            { path: "/menu", element: <MenuManagementPage /> },
+            { path: "/orders", element: <OrdersPage /> },
+            { path: "/performance", element: <PerformancePage /> },
+            { path: "/reviews", element: <ReviewsPage /> },
+            { path: "/promotions", element: <PromotionsPage /> },
+            { path: "/payments", element: <PaymentPage /> },
+            { path: "/opening-times", element: <OpeningTimesPage /> },
+            { path: "/settings", element: <SettingsPage /> },
+          ],
+        },
       ],
     },
-    {
-      path: "*",
-      element: <NotFound/>
-    }
+    { path: "*", element: <NotFound/> }
   ]
 );
